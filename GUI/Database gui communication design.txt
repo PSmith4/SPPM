@@ -1,0 +1,3 @@
+POS Interface: <- ID, Name, Current Stock, Price ->(Inventory) ID, Current Stock (Sale_Hist) ID, Current Stock
+Add New Item to Catalogue: <- ID, Name, Description -> (Product) Name, Description, Price
+Shipment update: <- ID, Name, Current Stock -> (Inventory) ID, Current Stock
