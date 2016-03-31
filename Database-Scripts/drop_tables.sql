@@ -1,0 +1,7 @@
+# Script to drop all database tables
+
+DROP TABLE SALE_HISTORY;
+
+DROP TABLE INVENTORY;
+
+DROP TABLE PRODUCT;
