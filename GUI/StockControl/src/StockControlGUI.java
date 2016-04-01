@@ -12,8 +12,20 @@ class StockControlGUI{
 		JFrame f = new JFrame();
 		f.setTitle("Stock Controller");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-		f.add(new StorePanel());
 		
+                JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
+               //tabbedPane.pr
+                
+                StorePanel sales=new StorePanel();
+                newStock incomingStock= new newStock();
+                JPanel newItem = new JPanel();
+
+                
+                tabbedPane.add("Sale",sales);
+                tabbedPane.add("Stock delivery", incomingStock);
+                tabbedPane.add("Add item", newItem);    
+
+		f.add(tabbedPane);
 		f.pack();
 		f.setSize(936,546); 
 		f.setLocation(10,200); 

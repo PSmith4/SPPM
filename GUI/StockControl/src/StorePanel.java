@@ -28,9 +28,12 @@ class StorePanel extends JPanel {
         
         //System.out.println("addbuttonrndere");
         
+        
+        
         JButton showButton = new JButton(text);
         //JSpinner spinner = new JSpinner(new SpinnerNumberModel());
-        
+
+
  
         JPanel panel = new JPanel();
         //panel.add(spinner);
@@ -41,6 +44,7 @@ class StorePanel extends JPanel {
         }else{
          panel.setBackground(table.getBackground());
         }
+        
         return panel;
     }
 }
@@ -73,6 +77,7 @@ class StorePanel extends JPanel {
            if(col==3)
            {   JButton remove= new JButton("remove");
            
+
            remove.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             System.out.println("remove sale"); 
@@ -183,10 +188,10 @@ class StorePanel extends JPanel {
   {
 	 
 	 setSize(836,546); 
-	 JButton finishButton = new JButton("Finish");
+    
 
 	 Object[][] tempCatContent =GUI_DB_Link.getFullCataloge();
-
+        
 
 
   for (int i =0; i< tempCatContent.length; i++)
@@ -249,7 +254,11 @@ class StorePanel extends JPanel {
     JScrollPane CatalougeScoll = new JScrollPane(CatalougeTable);
 	CatalougeTable.setPreferredScrollableViewportSize(new Dimension(418, 242));
     CatalougeTable.setFillsViewportHeight(true);
-	add(CatalougeScoll);
+CatalougeTable.setRowMargin(5);
+    
+    CatalougeTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+    CatalougeTable.getColumnModel().getColumn(1).setPreferredWidth(230);
+    CatalougeTable.getColumnModel().getColumn(2).setPreferredWidth(20);
     
      JTable SaleTable = new JTable(saleTableModel);
      SaleTable.setDefaultRenderer(JButton.class, new TabbleButtonRenderer("-"));
@@ -259,12 +268,15 @@ class StorePanel extends JPanel {
      JScrollPane SaleScoll = new JScrollPane(SaleTable);
 	SaleTable.setPreferredScrollableViewportSize(new Dimension(418, 242));
     SaleTable.setFillsViewportHeight(true);
-   add(SaleScoll);
-     
-    add(finishButton);
-	
-
-    finishButton.addActionListener(new ActionListener() {
+ 
+    SaleTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+    SaleTable.getColumnModel().getColumn(1).setPreferredWidth(230);
+    SaleTable.getColumnModel().getColumn(2).setPreferredWidth(20);
+    
+    
+    JButton finishButton = new JButton("Finish");
+    
+     finishButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             
                 Object[][] output = new Object[SalesContent.size()][2];
@@ -292,6 +304,47 @@ class StorePanel extends JPanel {
                 
                 GUI_DB_Link.StockChange(output);
             }});
+    
+     
+     setLayout(new GridBagLayout()); 
+     
+    GridBagConstraints con = new GridBagConstraints();
+    con.weightx=1;
+    con.weighty=1;
+    con.anchor= GridBagConstraints.FIRST_LINE_START;
+    con.insets=new Insets(5,5,5,5);
+    con.gridx=10;
+    con.gridy=0;
+    con.gridheight=1;
+    con.gridwidth=1;
+    JLabel heading= new JLabel("Sale");
+    heading.setFont(new Font("Times New Roman",18,18));
+    add(heading, con);
+    
+    con.gridx=10;
+    con.gridy=2;
+    add(new JLabel("Current Stock"), con);
+    
+    con.gridx=105;
+    add(new JLabel("Sale Stock"), con);
+    
+    con.gridx=0;
+    con.gridy=3;
+    con.gridwidth=100;
+    con.gridheight=100;
+    add(CatalougeScoll,con);
+    
+    con.gridx=100;
+    add(SaleScoll,con);
+    
+    con.gridx=150;
+    con.gridy=103;
+    con.gridwidth=1;
+    con.gridheight=1;
+    add(finishButton,con);
+	
+
+   
   }
 
         
