@@ -312,8 +312,8 @@ public class StorePanel extends JPanel
 	CatalougeTable.setRowMargin(5);
 
 	CatalougeTable.getColumnModel().getColumn(0).setPreferredWidth(40);
-	CatalougeTable.getColumnModel().getColumn(1).setPreferredWidth(230);
-	CatalougeTable.getColumnModel().getColumn(2).setPreferredWidth(20);
+	CatalougeTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+	CatalougeTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
 	JTable SaleTable = new JTable(saleTableModel);
 	SaleTable.setDefaultRenderer(JButton.class, new TabbleButtonRenderer("-"));
@@ -325,8 +325,8 @@ public class StorePanel extends JPanel
 	SaleTable.setFillsViewportHeight(true);
 
 	SaleTable.getColumnModel().getColumn(0).setPreferredWidth(40);
-	SaleTable.getColumnModel().getColumn(1).setPreferredWidth(230);
-	SaleTable.getColumnModel().getColumn(2).setPreferredWidth(20);
+	SaleTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+	SaleTable.getColumnModel().getColumn(2).setPreferredWidth(50);
 
 	JButton finishButton = new JButton("Finish");
 
