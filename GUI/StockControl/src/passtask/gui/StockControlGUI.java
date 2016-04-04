@@ -24,11 +24,11 @@ public class StockControlGUI
 
 	StorePanel sales = new StorePanel();
 	newStock incomingStock = new newStock();
-	JPanel newItem = new JPanel();
+	newItem additem = new newItem();
 
 	tabbedPane.add("Sale", sales);
 	tabbedPane.add("Stock delivery", incomingStock);
-	tabbedPane.add("Add item", newItem);
+	tabbedPane.add("Add item", additem);
 
 	f.add(tabbedPane);
 	f.pack();
