@@ -79,10 +79,49 @@ public class DataBaseAccess
 		{ new Integer(186166), "Other thing2", new Integer(9) },
 		{ new Integer(186166), "Other thing3", new Integer(2) },
 		{ new Integer(186166), "Other thing4", new Integer(1) },
+                { new Integer(186166), "Other thing3", new Integer(2) },
+		{ new Integer(186166), "Other thing4", new Integer(1) },
+                { new Integer(186166), "Other thing3", new Integer(2) },
+		{ new Integer(186166), "Other thing4", new Integer(1) },
 		{ new Integer(186166), "thing with no stock", new Integer(0) },
 		{ new Integer(186166), "Other thing5", new Integer(5) },
 		{ new Integer(375734), "Third thing6", new Integer(10) } });
     }
+    
+    public static Object[][] getCatalogeWithDescription()
+    {
+	try
+	{
+	    getConnection();
+	}
+	catch(SQLException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return(new Object[][] { { new Integer(165615), "Panadol", "its this little pill that makes all your pain go away", new Integer(1) },
+		{ new Integer(186166), "Other thing1", "words go here",new Integer(5) },
+		{ new Integer(186166), "Other thing2", "words go here" ,new Integer(1) },
+		{ new Integer(186166), "Other thing3", "words go here",new Integer(1) },
+		{ new Integer(186166), "Other thing4", "words go here" ,new Integer(1) },
+                { new Integer(186166), "Other thing3", "words go here" ,new Integer(1) },
+		{ new Integer(186166), "Other thing4", "words go here" ,new Integer(1) },
+                { new Integer(186166), "Other thing3", "words go here" ,new Integer(1) },
+		{ new Integer(186166), "Other thing4", "words go here",new Integer(1)  },
+		{ new Integer(186166), "thing with no stock", "words go here" ,new Integer(1) },
+		{ new Integer(186166), "Other thing5", "words go here" ,new Integer(1) },
+		{ new Integer(375734), "Third thing6", "words go here" ,new Integer(1) } });
+    }
+    
+    public static void NewITem(Object[] newItem)
+    {
+        System.out.println(newItem[0] 
+                + " " + newItem[1]
+                + " " + newItem[2]
+        );
+    }
+    
 
     // takes an array: ID | stock change.
     public static void StockChange(Object[][] changelist)
