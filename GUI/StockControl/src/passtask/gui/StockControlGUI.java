@@ -25,11 +25,14 @@ public class StockControlGUI
 	StorePanel sales = new StorePanel();
 	newStock incomingStock = new newStock();
 	newItem additem = new newItem();
+        ReportRequestGUI reporter = new ReportRequestGUI();
 
 	tabbedPane.add("Sale", sales);
 	tabbedPane.add("Stock delivery", incomingStock);
 	tabbedPane.add("Add item", additem);
+        tabbedPane.add("Get Report", reporter);
 
+        
 	f.add(tabbedPane);
 	f.pack();
 	f.setSize(936, 546);
