@@ -2,5 +2,5 @@ package passtask.report;
 
 public class StockReport
 {
-    private ReportTypes reportType;
+    // private ReportTypes reportType;
 }

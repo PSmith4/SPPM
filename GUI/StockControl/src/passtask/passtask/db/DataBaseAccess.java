@@ -2,6 +2,7 @@ package passtask.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,6 +16,7 @@ public class DataBaseAccess
     private static String password = "sppm1234";
     private static String serverName = "101.188.15.208";
     private static String portNumber = "3306";
+    private static String databaseName = "";
 
     /**
      * Empty constructor for singleton.
@@ -99,15 +101,49 @@ public class DataBaseAccess
 	}
 	catch(SQLException e)
 	{
-
+	    e.printStackTrace();
 	}
 
 	return returnData;
     }
 
-    public void setPOSInterfaceData()
+    /**
+     * Updates the database with the information pertaining to any sale.
+     * 
+     * @param data
+     *            a multidimensional object array containing sale item ID and
+     *            updated stock amount (old current - amount sold).
+     */
+    public void makeSale(Object[][] data)
     {
+	PreparedStatement updateInventory = null;
+	PreparedStatement updateSaleHistory = null;
 
+	String updateInventoryString = "UPDATE " + databaseName + ".inventory SET stock = ? WHERE barcode = ?";
+	String updateHistoryString = "INSERT INTO " + databaseName + "(barcode, updated_stock) VALUES (?, ?)";
+
+	try(Connection conn = getConnection())
+	{
+	    conn.setAutoCommit(false);
+	    updateInventory = conn.prepareStatement(updateInventoryString);
+	    updateSaleHistory = conn.prepareStatement(updateHistoryString);
+
+	    for(int i = 0; i < data.length; i++)
+	    {
+		updateInventory.setInt(1, (int) data[i][1]);
+		updateInventory.setInt(2, (int) data[i][0]);
+		updateInventory.executeUpdate();
+		updateSaleHistory.setInt(1, (int) data[i][0]);
+		updateSaleHistory.setInt(2, (int) data[i][1]);
+		updateSaleHistory.executeUpdate();
+
+		conn.commit();
+	    }
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     /*
