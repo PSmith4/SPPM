@@ -71,7 +71,7 @@ public class DataBaseAccess
 	Statement getData = null;
 	Object[][] returnData = null;
 
-	String selectData = "SELECT barcode, prod_name, price FROM product INNER JOIN inventory on product.barcode = inventory.barcode";
+	String selectData = "SELECT product.barcode, product.prod_name, product.price, inventory.stock FROM PRODUCT INNER JOIN INVENTORY on product.barcode = inventory.barcode";
 
 	try(Connection conn = getConnection())
 	{
@@ -92,7 +92,7 @@ public class DataBaseAccess
 		returnData[i][0] = results.getInt(0);
 		returnData[i][1] = results.getString(1);
 		returnData[i][2] = results.getDouble(2); // TODO may need to
-							 // inclease col index
+							 // increase col index
 							 // by one if the join
 							 // puts both cols in
 							 // resultSet.
@@ -214,8 +214,88 @@ public class DataBaseAccess
 	    {
 		updateProduct.setString(1, (String) data[i][0]);
 		updateProduct.setString(2, (String) data[i][1]);
-		updateProduct.setDouble(3, (int) data[i][2]);
+		updateProduct.setDouble(3, (double) data[i][2]);
 		updateProduct.executeUpdate();
+
+		conn.commit();
+	    }
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Gets the ID (barcode), name and description of all products.
+     * 
+     * @return a two dimensional array that has the ID (barcode), name and
+     *         description of all products.
+     */
+    public static Object[][] getShipmentUpdate()
+    {
+	Statement getData = null;
+	Object[][] returnData = null;
+
+	String selectData = "SELECT product.barcode, product.prod_name, inventory.stock FROM PRODUCT INNER JOIN INVENTORY on product.barcode = inventory.barcode";
+
+	try(Connection conn = getConnection())
+	{
+	    getData = conn.createStatement();
+	    ResultSet results = getData.executeQuery(selectData);
+	    int rowCount = 0, i = 0;
+
+	    if(results.last())
+	    {
+		rowCount = results.getRow();
+		results.beforeFirst();
+	    }
+
+	    returnData = new Object[rowCount][3];
+
+	    while(results.next())
+	    {
+		returnData[i][0] = results.getInt(0);
+		returnData[i][1] = results.getString(1);
+		returnData[i][2] = results.getDouble(2); // TODO may need to
+							 // increase col index
+							 // by one if the join
+							 // puts both cols in
+							 // resultSet.
+		i++;
+	    }
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	}
+
+	return returnData;
+    }
+
+    /**
+     * Adds stock to existing items.
+     * 
+     * @param data
+     *            a two variable array with ID (barcode) and current stock
+     *            levels.
+     */
+    public static void addShipment(Object[][] data)
+    {
+	PreparedStatement updateInventory = null;
+
+	String updateInventoryString = "INSERT INTO INVENTORY (barcode, stock) VALUES (?, ?)";
+
+	try(Connection conn = getConnection())
+	{
+	    conn.setAutoCommit(false);
+	    updateInventory = conn.prepareStatement(updateInventoryString);
+
+	    for(int i = 0; i < data.length; i++)
+	    {
+		updateInventory.setString(1, (String) data[i][0]);
+		updateInventory.setInt(2, (int) data[i][1]);
+		updateInventory.executeUpdate();
 
 		conn.commit();
 	    }
@@ -232,16 +312,6 @@ public class DataBaseAccess
 
     public static Object[][] getFullCataloge()
     {
-	try
-	{
-	    getConnection();
-	}
-	catch(SQLException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
 	return(new Object[][] { { new Integer(165615), "Panadol", new Integer(4) },
 		{ new Integer(186166), "Other thing1", new Integer(5) },
 		{ new Integer(186166), "Other thing2", new Integer(9) },
