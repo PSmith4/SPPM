@@ -1,5 +1,6 @@
 package passtask.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -10,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import javax.swing.BorderFactory; 
 import javax.swing.border.Border;
 import javax.swing.ButtonGroup;
@@ -19,7 +21,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import passtask.db.DataBaseAccess;
 
 
 
@@ -34,12 +41,12 @@ public class ReportRequestGUI extends JPanel
     {
         
         Report.setPreferredSize(new Dimension(400,350));
-        
+        Report.setLayout(new BorderLayout());
         JButton GenerateBut = new JButton("Generate");
         setLayout(new GridBagLayout());
         
         /*Test colourings*/
-        Report.setBackground(Color.red);
+        Report.add(new JLabel("no report generated for display"));
        // RType.setBackground(Color.blue);
         //GType.setBackground(Color.yellow);
         /**/
@@ -59,6 +66,8 @@ public class ReportRequestGUI extends JPanel
                     {
                         Report.removeAll();;
                         Report.add(new CurrentReport());
+                        Report.revalidate();
+           
                     }
                     else if(GType.CSVGen.isSelected())    
                     {
@@ -303,7 +312,87 @@ public class ReportRequestGUI extends JPanel
     
      private class CurrentReport extends JPanel
      {
-         
+        public CurrentReport()
+        {
+            JTable StockList;
+           
+            DefaultTableModel model = new DefaultTableModel(DataBaseAccess.getFullCataloge(), new String[]{"ID","Name","Stock"});
+            StockList = new JTable(model);
+            StockList.setDefaultRenderer(Object.class, new RowColourRenderer());
+              
+           JScrollPane CatalougeScoll = new JScrollPane(StockList);
+           StockList.setPreferredScrollableViewportSize(new Dimension(360,350));
+           
+           
+          
+           /*
+           for(int row=0; row< StockList.getRowCount(); row++)
+           if((Integer)StockList.getValueAt(row,3)<3)
+               {
+                   if((Integer)StockList.getValueAt(row,3)<3)
+                    {
+                        StockList.setBackground(model.set);
+                    }
+                    return Color.red;
+               }
+          */
+           
+	
+
+            
+            add(CatalougeScoll);
+        }
      }
+     
+     
+     static class RowColourRenderer extends DefaultTableCellRenderer
+     {
+         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+         {
+             Component out = super.getTableCellRendererComponent(table,  value,  isSelected,  hasFocus,  row,  column);
+             
+             //System.out.println(table.getValueAt(row,2));
+             out.setBackground(Color.white);
+            if((Integer)table.getValueAt(row,2)<5)
+               {
+                   int aintEasyBeingGreen =148+40*((Integer)table.getValueAt(row,2));
+                   if(aintEasyBeingGreen>255)
+                       aintEasyBeingGreen=255;
+                   
+                   out.setBackground(new Color(255,aintEasyBeingGreen,148));
+                   //if((Integer)table.getValueAt(row,2)<1)
+                    //{
+                      //  out.setBackground(new Color(255,148,148));
+                   // }
+                   
+                   
+               }
+            
+            return out;
+         }
+     }
+     
+     /*
+     private class HighlightRowTable extends DefaultTableModel
+     {
+         public HighlightRowTable(Object[][] o, String[] s)
+         {
+             super(o,s);
+         }
+         
+        public Class getColumnClass(int columnIndex)
+	{
+	    if(columnIndex == 0)
+		return Integer.class;
+	    else if(columnIndex == 1)
+		return String.class;
+	    else if(columnIndex == 2)
+		return Integer.class;
+	    return JButton.class;
+	}
+        
+     }
+     */
+     
     
 }

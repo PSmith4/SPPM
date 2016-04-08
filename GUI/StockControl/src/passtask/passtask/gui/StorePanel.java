@@ -306,7 +306,8 @@ public class StorePanel extends JPanel
 	CatalougeTable.setDefaultRenderer(JButton.class, new TabbleButtonRenderer("+"));
 	CatalougeTable.setRowHeight(35);
 	CatalougeTable.addMouseListener(new TableButtonListener(CatalougeTable));
-	JScrollPane CatalougeScoll = new JScrollPane(CatalougeTable);
+	
+        JScrollPane CatalougeScoll = new JScrollPane(CatalougeTable);
 	CatalougeTable.setPreferredScrollableViewportSize(new Dimension(418, 242));
 	CatalougeTable.setFillsViewportHeight(true);
 	CatalougeTable.setRowMargin(5);
