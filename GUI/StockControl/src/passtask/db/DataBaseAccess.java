@@ -373,6 +373,48 @@ public class DataBaseAccess
 		{ new Integer(186166), "Other thing5", "words go here", new Integer(1) },
 		{ new Integer(375734), "Third thing6", "words go here", new Integer(1) } });
     }
+    
+    
+    public static Object[][] getSaleHistory()
+    {
+        try
+	{
+	    getConnection();
+	}
+	catch(SQLException e)
+	{
+	    // TODO Auto-generated catch block
+	    //e.printStackTrace();
+	}
+        
+       return(new Object[][] {
+		{ new Integer(165615), "Panadol", new Integer(6) },
+		{ new Integer(165615), "Panadol",  new Integer(5) },
+		{ new Integer(165615), "Panadol", new Integer(4) },
+		{ new Integer(186166), "Other thing", new Integer(9) },
+		{ new Integer(186166), "Other thing", new Integer(10) },
+		{ new Integer(186166), "Other thing",  new Integer(8) },
+		{ new Integer(375734), "Third thing",  new Integer(20) },
+		{ new Integer(375734), "Third thing",  new Integer(19) },
+                { new Integer(186166), "Other thing",  new Integer(3) },
+		{ new Integer(186166), "Other thing",  new Integer(0) },
+		{ new Integer(375734), "Third thing",  new Integer(18) },
+		{ new Integer(375734), "Third thing",  new Integer(17) },
+       
+                { new Integer(186165), "Other thing1", new Integer(9) },
+		{ new Integer(186167), "Other thing2", new Integer(10) },
+                { new Integer(186168), "Other thing3", new Integer(9) },
+		{ new Integer(186169), "Other thing4", new Integer(10) },
+                { new Integer(186170), "Other thing5", new Integer(9) },
+		{ new Integer(186171), "Other thing6", new Integer(10) },
+                { new Integer(186172), "Other thing7", new Integer(9) },
+		{ new Integer(186172), "Other thing7", new Integer(10) },
+                { new Integer(186173), "Other thing8", new Integer(9) },
+		{ new Integer(186175), "Other thing9", new Integer(10) },
+                { new Integer(186179), "Other thing10", new Integer(9) },
+		{ new Integer(186186), "Other thing11", new Integer(10) }
+       }); 
+    }
 
     public static void NewITem(Object[] newItem)
     {
