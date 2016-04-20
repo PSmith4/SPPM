@@ -58,7 +58,17 @@ public class ReportRequestGUI extends JPanel
 	    {
                 if(RType.SalesHistory.isSelected())
                 {
-                    System.out.println("This will generate a sales history report in a future sprint");
+                    if(GType.Display.isSelected())
+                    {
+                        Report.removeAll();;
+                        Report.add(new SalesHistoryReport());
+                        Report.revalidate();
+           
+                    }
+                    else if(GType.CSVGen.isSelected())    
+                    {
+                        System.out.println("Output CSV File to"+GType.FileLoc.getSelectedFile());
+                    }
                 }
                 else if(RType.CurrentStock.isSelected())
                 {
@@ -123,8 +133,8 @@ public class ReportRequestGUI extends JPanel
         final public JRadioButton SalesHistory = new JRadioButton("Sales History");
         final public JPanel HistorySetting = new JPanel(new GridLayout(2,2));
         final public JRadioButton CurrentStock = new JRadioButton("Current Stock");
-        final public JComboBox history = new JComboBox(new String[]{"Last Day","Last Week","Last Month","Last Year"});
-        final public JComboBox step = new JComboBox(new String[]{"Hour","Day","Week","Month"});
+        final public JComboBox history = new JComboBox(new String[]{"Last Day"   });//   ,"Last Week","Last Month","Last Year"}); \\more histories can be done later
+        final public JComboBox step = new JComboBox(new String[]{"Hour"          });//         ,"Day","Week","Month"}); \\more step sizes later
             //should make these private and create a single getter for all... will do oneday
             
         public RTypePanel()
@@ -166,7 +176,7 @@ public class ReportRequestGUI extends JPanel
             SalesHistory.addActionListener(this);
             CurrentStock.addActionListener(this);
             
-             SalesHistory.setEnabled(false);   //this in effect until next sprint
+             //SalesHistory.setEnabled(false);   //this in effect until next sprint
         }
         
         public void actionPerformed(ActionEvent e) {
@@ -321,10 +331,8 @@ public class ReportRequestGUI extends JPanel
             StockList.setDefaultRenderer(Object.class, new RowColourRenderer());
               
            JScrollPane CatalougeScoll = new JScrollPane(StockList);
-           StockList.setPreferredScrollableViewportSize(new Dimension(360,350));
-           
-           
-          
+           StockList.setPreferredScrollableViewportSize(new Dimension(360,320));
+
            /*
            for(int row=0; row< StockList.getRowCount(); row++)
            if((Integer)StockList.getValueAt(row,3)<3)
@@ -335,11 +343,7 @@ public class ReportRequestGUI extends JPanel
                     }
                     return Color.red;
                }
-          */
-           
-	
-
-            
+          */           
             add(CatalougeScoll);
         }
      }
@@ -371,28 +375,7 @@ public class ReportRequestGUI extends JPanel
             return out;
          }
      }
-     
-     /*
-     private class HighlightRowTable extends DefaultTableModel
-     {
-         public HighlightRowTable(Object[][] o, String[] s)
-         {
-             super(o,s);
-         }
-         
-        public Class getColumnClass(int columnIndex)
-	{
-	    if(columnIndex == 0)
-		return Integer.class;
-	    else if(columnIndex == 1)
-		return String.class;
-	    else if(columnIndex == 2)
-		return Integer.class;
-	    return JButton.class;
-	}
-        
-     }
-     */
-     
+      
+    
     
 }
