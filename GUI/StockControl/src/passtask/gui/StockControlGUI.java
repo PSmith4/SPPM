@@ -1,5 +1,7 @@
-package gui;
+package passtask.gui;
 
+import java.sql.SQLException;
+import passtask.gui.newStock;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
@@ -11,7 +13,7 @@ import javax.swing.JTabbedPane;
  */
 public class StockControlGUI
 {
-    public StockControlGUI()
+    public StockControlGUI() throws SQLException
     {
 
 	JFrame f = new JFrame();

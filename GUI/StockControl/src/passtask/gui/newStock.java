@@ -1,4 +1,4 @@
-package gui;
+package passtask.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,11 +22,11 @@ import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import db.DataBaseAccess;
+import passtask.db.DataBaseAccess;
 
 public class newStock extends JPanel
 {
-    private DataBaseAccess dba = DataBaseAccess.getInstance();
+    private DataBaseAccess dba;
 
     /**
      * 
@@ -34,10 +35,11 @@ public class newStock extends JPanel
     final ArrayList<Object[]> CatContent = new ArrayList<Object[]>();
     final CatTableModel catTableModel = new CatTableModel(CatContent);
 
-    public newStock()
+    public newStock() throws SQLException
     {
+        this.dba = DataBaseAccess.getInstance();
 	setSize(836, 546);
-	Object[][] tempCatContent = DataBaseAccess.getFullCataloge();
+	Object[][] tempCatContent = DataBaseAccess.getItemCatalogue();
 
 	for(int i = 0; i < tempCatContent.length; i++)
 	{
@@ -94,7 +96,7 @@ public class newStock extends JPanel
 		    outputArray[loopcount] = item;
 		    loopcount++;
 		}
-		DataBaseAccess.StockChange(outputArray);
+		DataBaseAccess.addShipment(outputArray);
 		catTableModel.fireTableDataChanged();
 	    }
 	});

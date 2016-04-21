@@ -1,4 +1,4 @@
-package db;
+package passtask.db;
 
 import static org.junit.Assert.fail;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package gui;
+package passtask.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import db.DataBaseAccess;
+import passtask.db.DataBaseAccess;
 
 public class StorePanel extends JPanel
 {
@@ -241,7 +241,7 @@ public class StorePanel extends JPanel
 
 	setSize(836, 546);
 
-	Object[][] tempCatContent = DataBaseAccess.getFullCataloge();
+	Object[][] tempCatContent = DataBaseAccess.getItemCatalogue();
 
 	for(int i = 0; i < tempCatContent.length; i++)
 	{
@@ -359,7 +359,7 @@ public class StorePanel extends JPanel
 
 		}
 
-		DataBaseAccess.StockChange(output);
+		DataBaseAccess.makeSale(output);
 	    }
 	});
 

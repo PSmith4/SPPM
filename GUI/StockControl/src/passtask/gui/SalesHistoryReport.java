@@ -1,4 +1,4 @@
-package gui;
+package passtask.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,15 +8,23 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import db.DataBaseAccess;
+import passtask.db.DataBaseAccess;
 import javafx.scene.chart.NumberAxis;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.category.SlidingCategoryDataset;
 
 public class SalesHistoryReport extends JPanel
 {
     public SalesHistoryReport()
     {
 
-	Object[][] saleshistory = DataBaseAccess.getSaleHistory();
+	Object[][] saleshistory = DataBaseAccess.getItemCatalogue();
 
 	// create a dataset...
 
@@ -80,11 +88,11 @@ public class SalesHistoryReport extends JPanel
 	chart.setBackgroundPaint(Color.white);
 	CategoryPlot plot = (CategoryPlot) chart.getPlot();
 
-	NumberAxis rangeAxis = new NumberAxis(0, plot.getRangeAxis().getUpperBound());
-	rangeAxis.setAutoRangeIncludesZero(true);
+	//NumberAxis rangeAxis = new NumberAxis("name");// ,0, plot.getRangeAxis().getUpperBound());
+	//rangeAxis.setAutoRangeIncludesZero(true);
 
-	rangeAxis.setAutoRangeStickyZero(true);
-	rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+	//rangeAxis.setAutoRangeStickyZero(true);
+	//rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 	BarRenderer renderer = (BarRenderer) plot.getRenderer();
 	renderer.setShadowXOffset(0);
 	renderer.setItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("##")));

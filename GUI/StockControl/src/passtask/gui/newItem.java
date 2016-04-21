@@ -1,4 +1,4 @@
-package gui;
+package passtask.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
-import db.DataBaseAccess;
+import passtask.db.DataBaseAccess;
 
 public class newItem extends JPanel
 {
@@ -27,7 +27,7 @@ public class newItem extends JPanel
     public newItem()
     {
 
-	JTable CatalougeTable = new JTable(new DefaultTableModel(DataBaseAccess.getCatalogeWithDescription(),
+	JTable CatalougeTable = new JTable(new DefaultTableModel(DataBaseAccess.getItemCatalogue(),
 		new String[]
 	{ "ID", "Name", "Description", "Price" }));
 
@@ -116,7 +116,7 @@ public class newItem extends JPanel
 		    Description.setText("");
 		    output[2] = price.getValue();
 		    price.setValue(0);
-		    DataBaseAccess.NewITem(output);
+		    DataBaseAccess.addItem(output);
 		}
 
 	    }
