@@ -1,14 +1,27 @@
-package passtask.gui;
+package gui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.table.*;
-import passtask.db.DataBaseAccess;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import db.DataBaseAccess;
 
 public class newStock extends JPanel
 {
@@ -20,7 +33,7 @@ public class newStock extends JPanel
     private static final long serialVersionUID = -1802872436430640877L;
     final ArrayList<Object[]> CatContent = new ArrayList<Object[]>();
     final CatTableModel catTableModel = new CatTableModel(CatContent);
-    
+
     public newStock()
     {
 	setSize(836, 546);
@@ -35,61 +48,58 @@ public class newStock extends JPanel
 	    CatContent.get(buttoncount)[1] = tempCatContent[i][1];
 	    CatContent.get(buttoncount)[2] = tempCatContent[i][2];
 
-	    JSpinner newstockSpin = new JSpinner(new SpinnerNumberModel(0,0,100,1));
+	    JSpinner newstockSpin = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
 	    CatContent.get(buttoncount)[3] = newstockSpin;
 
 	}
-        
-       
-  JTable CatalougeTable = new JTable(catTableModel); 
 
+	JTable CatalougeTable = new JTable(catTableModel);
 
-    CatalougeTable.setDefaultRenderer(JSpinner.class, new TabbleSpinnerRenderer());
-    CatalougeTable.addMouseListener(new TableSpinnerListener(CatalougeTable));
-        
+	CatalougeTable.setDefaultRenderer(JSpinner.class, new TabbleSpinnerRenderer());
+	CatalougeTable.addMouseListener(new TableSpinnerListener(CatalougeTable));
+
 	CatalougeTable.setRowHeight(35);
 	JScrollPane CatalougeScoll = new JScrollPane(CatalougeTable);
 	CatalougeTable.setPreferredScrollableViewportSize(new Dimension(618, 242));
 	CatalougeTable.setFillsViewportHeight(true);
 	CatalougeTable.setRowMargin(5);
-           
-        JButton FinishAdding = new JButton("Add stock to system");
-        
-        FinishAdding.addActionListener(new ActionListener()
+
+	JButton FinishAdding = new JButton("Add stock to system");
+
+	FinishAdding.addActionListener(new ActionListener()
 	{
 	    public void actionPerformed(ActionEvent arg0)
 	    {
-                 
+
 		ArrayList<Object[]> output = new ArrayList<Object[]>();
-	
-		
+
 		for(Object[] item : CatContent)
 		{
-                    int newStock =((Integer)((JSpinner)item[3]).getValue());
-                    if( newStock>0 )
-                    {//System.out.println(newStock);
-                        newStock = (Integer)item[2] + newStock;
-                        //System.out.println(newStock);
-                        output.add(new Object[]{item[0],newStock});
-                        ((JSpinner)item[3]).setValue(0);
-                        item[2]= newStock;
-                    }
+		    int newStock = ((Integer) ((JSpinner) item[3]).getValue());
+		    if(newStock > 0)
+		    {// System.out.println(newStock);
+			newStock = (Integer) item[2] + newStock;
+			// System.out.println(newStock);
+			output.add(new Object[] { item[0], newStock });
+			((JSpinner) item[3]).setValue(0);
+			item[2] = newStock;
+		    }
 		}
-                
-                Object[][] outputArray = new Object[output.size()][2];
-                
-                int loopcount=0;
-                for(Object[] item : output)
+
+		Object[][] outputArray = new Object[output.size()][2];
+
+		int loopcount = 0;
+		for(Object[] item : output)
 		{
-                    outputArray[loopcount]= item;
-                    loopcount++;
-                }
+		    outputArray[loopcount] = item;
+		    loopcount++;
+		}
 		DataBaseAccess.StockChange(outputArray);
-                  catTableModel.fireTableDataChanged();
+		catTableModel.fireTableDataChanged();
 	    }
 	});
-        
-        setLayout(new GridBagLayout());
+
+	setLayout(new GridBagLayout());
 
 	GridBagConstraints con = new GridBagConstraints();
 	con.weightx = 1;
@@ -100,41 +110,39 @@ public class newStock extends JPanel
 	con.gridy = 0;
 	con.gridheight = 1;
 	con.gridwidth = 1;
-        
-        JLabel heading = new JLabel("Add Stock");
+
+	JLabel heading = new JLabel("Add Stock");
 	heading.setFont(new Font("Times New Roman", 18, 18));
 	add(heading, con);
-        
-        con.gridx = 0;
+
+	con.gridx = 0;
 	con.gridy = 3;
 	con.gridwidth = 200;
 	con.gridheight = 100;
-	add(CatalougeScoll,con);
-        
-        con.gridx = 200;
+	add(CatalougeScoll, con);
+
+	con.gridx = 200;
 	con.gridy = 103;
 	con.gridwidth = 1;
 	con.gridheight = 1;
-	add(FinishAdding,con);
+	add(FinishAdding, con);
 
     }
 
-
-
     class TabbleSpinnerRenderer extends JSpinner implements TableCellRenderer
     {
-        
+
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 		int row, int column)
 	{
-	   // System.out.println("addbuttonrndere");
+	    // System.out.println("addbuttonrndere");
 
-	    JSpinner newStock = (JSpinner)value;
+	    JSpinner newStock = (JSpinner) value;
 	    // JSpinner spinner = new JSpinner(new SpinnerNumberModel());
 
 	    JPanel panel = new JPanel();
 	    // panel.add(spinner);
-            panel.setLayout(new BorderLayout());
+	    panel.setLayout(new BorderLayout());
 	    panel.add(newStock);
 
 	    if(isSelected)
@@ -186,7 +194,7 @@ public class newStock extends JPanel
 	{
 	    return this.stockitems.size();
 	}
-        
+
 	public void setValueAt(Object value, int row, int col)
 	{
 	    Object[] temp = stockitems.get(row);
@@ -205,7 +213,7 @@ public class newStock extends JPanel
 	}
 
     }
-    
+
     class TableSpinnerListener extends MouseAdapter
     {
 	private final JTable table;
@@ -226,25 +234,25 @@ public class newStock extends JPanel
 		System.out.println("Value :" + value.getClass().getName());
 		if(value instanceof JSpinner)
 		{
-                    if(e.getY()>(row+0.5)*table.getRowHeight() )
-                    {
-                        System.out.println("Bottom"+((JSpinner)value).getValue()+((JSpinner)value).getPreviousValue() );
-                       ((JSpinner)value).setValue( ((JSpinner)value).getPreviousValue() );
-                       //((JSpinner)value).setValue(value);
-                    }
-                    else
-                    {
-                        System.out.println("top[");
-                        ((JSpinner)value).setValue(((JSpinner)value).getNextValue());
-                        //((JSpinner)value).setValue(( (Integer) (((JSpinner) value).getValue())) +1 );    
-                    }
+		    if(e.getY() > (row + 0.5) * table.getRowHeight())
+		    {
+			System.out.println(
+				"Bottom" + ((JSpinner) value).getValue() + ((JSpinner) value).getPreviousValue());
+			((JSpinner) value).setValue(((JSpinner) value).getPreviousValue());
+			// ((JSpinner)value).setValue(value);
+		    }
+		    else
+		    {
+			System.out.println("top[");
+			((JSpinner) value).setValue(((JSpinner) value).getNextValue());
+			// ((JSpinner)value).setValue(( (Integer) (((JSpinner)
+			// value).getValue())) +1 );
+		    }
 		}
-                catTableModel.fireTableDataChanged();
+		catTableModel.fireTableDataChanged();
 
 	    }
 	}
     }
 
-
-    
 }

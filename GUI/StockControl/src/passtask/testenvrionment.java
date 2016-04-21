@@ -1,6 +1,5 @@
-package passtask;
 
-import passtask.gui.StockControlGUI;
+import gui.StockControlGUI;
 
 public class testenvrionment
 {

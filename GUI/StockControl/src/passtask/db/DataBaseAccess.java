@@ -1,4 +1,4 @@
-package passtask.db;
+package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,22 +16,27 @@ public class DataBaseAccess
     private static String password = "sppm1234";
     private static String serverName = "101.188.15.208";
     private static String portNumber = "3306";
-    private static String databaseName = "";
+    private static String databaseName = "sppm_phpsrs";
 
     /**
      * Empty constructor for singleton.
+     * 
+     * @throws SQLException
+     *             if connection fails.
      */
-    private DataBaseAccess()
+    private DataBaseAccess() throws SQLException
     {
-
+	dbConn = getConnection();
     };
 
     /**
      * Singleton implementation.
      * 
      * @return an instance of the database access class.
+     * @throws SQLException
+     *             if connection fails.
      */
-    public static DataBaseAccess getInstance()
+    public static DataBaseAccess getInstance() throws SQLException
     {
 	if(instance == null)
 	{
@@ -54,8 +59,10 @@ public class DataBaseAccess
 	Properties connectionProps = new Properties();
 	connectionProps.put("user", userName);
 	connectionProps.put("password", password);
+	connectionProps.put("useSSL", "false");
 
-	conn = DriverManager.getConnection("jdbc:mysql://" + serverName + ":" + portNumber + "/", connectionProps);
+	conn = DriverManager.getConnection("jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName,
+		connectionProps);
 
 	return conn;
     }
@@ -89,14 +96,10 @@ public class DataBaseAccess
 
 	    while(results.next())
 	    {
-		returnData[i][0] = results.getInt(0);
-		returnData[i][1] = results.getString(1);
-		returnData[i][2] = results.getDouble(2); // TODO may need to
-							 // increase col index
-							 // by one if the join
-							 // puts both cols in
-							 // resultSet.
-		returnData[i][3] = results.getDouble(3);
+		returnData[i][0] = results.getInt(1);
+		returnData[i][1] = results.getString(2);
+		returnData[i][2] = results.getDouble(3);
+		returnData[i][3] = results.getDouble(4);
 		i++;
 	    }
 	}
@@ -323,7 +326,7 @@ public class DataBaseAccess
 		{ new Integer(186166), "Other thing4", new Integer(1) },
 		{ new Integer(186166), "thing with no stock", new Integer(0) },
 		{ new Integer(186166), "Other thing5", new Integer(5) },
-                { new Integer(186166), "Other thing1", new Integer(5) },
+		{ new Integer(186166), "Other thing1", new Integer(5) },
 		{ new Integer(186166), "Other thing2", new Integer(9) },
 		{ new Integer(186166), "Other thing3", new Integer(2) },
 		{ new Integer(186166), "Other thing4", new Integer(1) },
@@ -333,7 +336,7 @@ public class DataBaseAccess
 		{ new Integer(186166), "Other thing4", new Integer(1) },
 		{ new Integer(186166), "thing with no stock", new Integer(0) },
 		{ new Integer(186166), "Other thing5", new Integer(5) },
-                { new Integer(186166), "Other thing1", new Integer(5) },
+		{ new Integer(186166), "Other thing1", new Integer(5) },
 		{ new Integer(186166), "Other thing2", new Integer(9) },
 		{ new Integer(186166), "Other thing3", new Integer(2) },
 		{ new Integer(186166), "Other thing4", new Integer(1) },
@@ -373,47 +376,43 @@ public class DataBaseAccess
 		{ new Integer(186166), "Other thing5", "words go here", new Integer(1) },
 		{ new Integer(375734), "Third thing6", "words go here", new Integer(1) } });
     }
-    
-    
+
     public static Object[][] getSaleHistory()
     {
-        try
+	try
 	{
 	    getConnection();
 	}
 	catch(SQLException e)
 	{
 	    // TODO Auto-generated catch block
-	    //e.printStackTrace();
+	    // e.printStackTrace();
 	}
-        
-       return(new Object[][] {
-		{ new Integer(165615), "Panadol", new Integer(6) },
-		{ new Integer(165615), "Panadol",  new Integer(5) },
-		{ new Integer(165615), "Panadol", new Integer(4) },
+
+	return(new Object[][] { { new Integer(165615), "Panadol", new Integer(6) },
+		{ new Integer(165615), "Panadol", new Integer(5) }, { new Integer(165615), "Panadol", new Integer(4) },
 		{ new Integer(186166), "Other thing", new Integer(9) },
 		{ new Integer(186166), "Other thing", new Integer(10) },
-		{ new Integer(186166), "Other thing",  new Integer(8) },
-		{ new Integer(375734), "Third thing",  new Integer(20) },
-		{ new Integer(375734), "Third thing",  new Integer(19) },
-                { new Integer(186166), "Other thing",  new Integer(3) },
-		{ new Integer(186166), "Other thing",  new Integer(0) },
-		{ new Integer(375734), "Third thing",  new Integer(18) },
-		{ new Integer(375734), "Third thing",  new Integer(17) },
-       
-                { new Integer(186165), "Other thing1", new Integer(9) },
+		{ new Integer(186166), "Other thing", new Integer(8) },
+		{ new Integer(375734), "Third thing", new Integer(20) },
+		{ new Integer(375734), "Third thing", new Integer(19) },
+		{ new Integer(186166), "Other thing", new Integer(3) },
+		{ new Integer(186166), "Other thing", new Integer(0) },
+		{ new Integer(375734), "Third thing", new Integer(18) },
+		{ new Integer(375734), "Third thing", new Integer(17) },
+
+		{ new Integer(186165), "Other thing1", new Integer(9) },
 		{ new Integer(186167), "Other thing2", new Integer(10) },
-                { new Integer(186168), "Other thing3", new Integer(9) },
+		{ new Integer(186168), "Other thing3", new Integer(9) },
 		{ new Integer(186169), "Other thing4", new Integer(10) },
-                { new Integer(186170), "Other thing5", new Integer(9) },
+		{ new Integer(186170), "Other thing5", new Integer(9) },
 		{ new Integer(186171), "Other thing6", new Integer(10) },
-                { new Integer(186172), "Other thing7", new Integer(9) },
+		{ new Integer(186172), "Other thing7", new Integer(9) },
 		{ new Integer(186172), "Other thing7", new Integer(10) },
-                { new Integer(186173), "Other thing8", new Integer(9) },
+		{ new Integer(186173), "Other thing8", new Integer(9) },
 		{ new Integer(186175), "Other thing9", new Integer(10) },
-                { new Integer(186179), "Other thing10", new Integer(9) },
-		{ new Integer(186186), "Other thing11", new Integer(10) }
-       }); 
+		{ new Integer(186179), "Other thing10", new Integer(9) },
+		{ new Integer(186186), "Other thing11", new Integer(10) } });
     }
 
     public static void NewITem(Object[] newItem)

@@ -1,4 +1,4 @@
-package passtask.gui;
+package gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import passtask.db.DataBaseAccess;
+import db.DataBaseAccess;
 
 public class StorePanel extends JPanel
 {
@@ -306,8 +306,8 @@ public class StorePanel extends JPanel
 	CatalougeTable.setDefaultRenderer(JButton.class, new TabbleButtonRenderer("+"));
 	CatalougeTable.setRowHeight(35);
 	CatalougeTable.addMouseListener(new TableButtonListener(CatalougeTable));
-	
-        JScrollPane CatalougeScoll = new JScrollPane(CatalougeTable);
+
+	JScrollPane CatalougeScoll = new JScrollPane(CatalougeTable);
 	CatalougeTable.setPreferredScrollableViewportSize(new Dimension(418, 242));
 	CatalougeTable.setFillsViewportHeight(true);
 	CatalougeTable.setRowMargin(5);
