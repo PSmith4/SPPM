@@ -138,9 +138,8 @@ public class StorePanel extends JPanel
 
 		    }
 		});
-
-		catTableModel.fireTableDataChanged();
-		saleTableModel.fireTableDataChanged();
+                update();
+		
 
 		return remove;
 	    }
@@ -241,7 +240,7 @@ public class StorePanel extends JPanel
 
 	setSize(836, 546);
 
-	Object[][] tempCatContent = DataBaseAccess.getItemCatalogue();
+	Object[][] tempCatContent = DataBaseAccess.getShipmentUpdate();
 
 	for(int i = 0; i < tempCatContent.length; i++)
 	{
@@ -346,7 +345,8 @@ public class StorePanel extends JPanel
 		    System.out.println(saleitem[0] + " " + saleitem[1] + " " + saleitem[2]);
 		    loopcount++;
 		}
-
+                SalesContent.clear();
+update();
 		for(Object[] catitem : CatContent)
 		{
 		    for(int i = 0; i < output.length; i++)
@@ -401,5 +401,10 @@ public class StorePanel extends JPanel
 	add(finishButton, con);
 
     }
-
+   
+    public void update()
+    {
+        catTableModel.fireTableDataChanged();
+	saleTableModel.fireTableDataChanged();}
+    
 }

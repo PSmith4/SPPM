@@ -35,11 +35,12 @@ public class newStock extends JPanel
     final ArrayList<Object[]> CatContent = new ArrayList<Object[]>();
     final CatTableModel catTableModel = new CatTableModel(CatContent);
 
+
     public newStock() throws SQLException
     {
         this.dba = DataBaseAccess.getInstance();
 	setSize(836, 546);
-	Object[][] tempCatContent = DataBaseAccess.getItemCatalogue();
+	Object[][] tempCatContent = DataBaseAccess.getShipmentUpdate();
 
 	for(int i = 0; i < tempCatContent.length; i++)
 	{

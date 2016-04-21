@@ -8,6 +8,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,13 +27,11 @@ import passtask.db.DataBaseAccess;
 public class newItem extends JPanel
 {
 
+    private JTable CatalougeTable = new JTable(new DefaultTableModel(DataBaseAccess.getItemCatalogue(),
+		new String[]
+	{ "ID", "Name", "Price","Description" }));
     public newItem()
     {
-
-	JTable CatalougeTable = new JTable(new DefaultTableModel(DataBaseAccess.getItemCatalogue(),
-		new String[]
-	{ "ID", "Name", "Description", "Price" }));
-
 	CatalougeTable.setRowHeight(35);
 
 	JScrollPane CatalougeScoll = new JScrollPane(CatalougeTable);
@@ -40,7 +41,8 @@ public class newItem extends JPanel
 
 	CatalougeTable.getColumnModel().getColumn(0).setPreferredWidth(40);
 	CatalougeTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-
+	CatalougeTable.getColumnModel().getColumn(2).setPreferredWidth(40);
+        
 	setLayout(new GridBagLayout());
 
 	GridBagConstraints con = new GridBagConstraints();
@@ -60,7 +62,7 @@ public class newItem extends JPanel
 	con.gridy = 2;
 	add(new JLabel("New Item"), con);
 
-	con.gridx = 105;
+	con.gridx = 500;
 	add(new JLabel("Current Items"), con);
 
 	con.gridx = 500;
@@ -68,7 +70,9 @@ public class newItem extends JPanel
 	con.gridheight = 242;
 	con.gridwidth = 418;
 	add(CatalougeScoll, con);
-
+        
+        
+        
 	con.gridx = 0;
 	add(new ItemAdder(), con);
     }
@@ -109,14 +113,23 @@ public class newItem extends JPanel
 	    {
 		public void actionPerformed(ActionEvent arg0)
 		{
-		    Object[] output = new Object[3];
-		    output[0] = name.getText();
-		    name.setText("");
-		    output[1] = Description.getText();
-		    Description.setText("");
-		    output[2] = price.getValue();
-		    price.setValue(0);
-		    DataBaseAccess.addItem(output);
+                    if(!name.getText().equals("") && !Description.getText().equals("") )
+                     {
+                         Object[] output = new Object[3];
+                        output[0] = name.getText();
+                        name.setText("");
+                        output[1] = Description.getText();
+                        Description.setText("");
+                        output[2] = price.getValue();
+                        price.setValue(0);
+                        DataBaseAccess.addItem(output);
+
+                        try {
+                            StockControlGUI.update();
+                        } catch (SQLException ex) {
+
+                        }
+                    }
 		}
 
 	    }
@@ -125,5 +138,6 @@ public class newItem extends JPanel
 
 	}
     }
+    
 
 }

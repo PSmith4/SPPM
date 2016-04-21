@@ -332,7 +332,7 @@ public class ReportRequestGUI extends JPanel
 	{
 	    JTable StockList;
 
-	    DefaultTableModel model = new DefaultTableModel(DataBaseAccess.getItemCatalogue(),
+	    DefaultTableModel model = new DefaultTableModel(DataBaseAccess.getShipmentUpdate(),
 		    new String[]
 	    { "ID", "Name", "Stock" });
 	    StockList = new JTable(model);
