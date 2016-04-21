@@ -276,7 +276,7 @@ public class DataBaseAccess
 	Statement getData = null;
 	Object[][] returnData = null;
 
-	String selectData = "SELECT product.barcode, product.prod_name, inventory.stock FROM PRODUCT INNER JOIN INVENTORY on product.barcode = inventory.barcode";
+	String selectData = "SELECT product.barcode, product.prod_name, inventory.stock FROM PRODUCT LEFT JOIN INVENTORY on product.barcode = inventory.barcode ";
 
 	try(Connection conn = getConnection())
 	{
@@ -296,7 +296,7 @@ public class DataBaseAccess
 	    {
 		returnData[i][0] = results.getInt(1);
 		returnData[i][1] = results.getString(2);
-		returnData[i][2] = results.getDouble(3);
+		returnData[i][2] = results.getInt(3); //lets make this an int, as 1.5 items is hard come by
 		i++;
 	    }
 	}
@@ -408,8 +408,8 @@ public class DataBaseAccess
 		{ new Integer(186166), "Other thing5", "words go here", new Integer(1) },
 		{ new Integer(375734), "Third thing6", "words go here", new Integer(1) } });
     }
-
-    public static Object[][] getSaleHistory()
+*/
+    public static Object[][] getSaleHistoryTester()
     {
 	try
 	{
@@ -446,7 +446,7 @@ public class DataBaseAccess
 		{ new Integer(186179), "Other thing10", new Integer(9) },
 		{ new Integer(186186), "Other thing11", new Integer(10) } });
     }
-
+/*
     public static void NewITem(Object[] newItem)
     {
 	System.out.println(newItem[0] + " " + newItem[1] + " " + newItem[2]);
