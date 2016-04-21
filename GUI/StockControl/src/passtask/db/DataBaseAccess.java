@@ -181,9 +181,9 @@ public class DataBaseAccess
 
 	    while(results.next())
 	    {
-		returnData[i][0] = results.getInt(0);
-		returnData[i][1] = results.getString(1);
-		returnData[i][2] = results.getString(2);
+		returnData[i][0] = results.getInt(1);
+		returnData[i][1] = results.getString(2);
+		returnData[i][2] = results.getString(3);
 		i++;
 	    }
 	}
@@ -258,13 +258,9 @@ public class DataBaseAccess
 
 	    while(results.next())
 	    {
-		returnData[i][0] = results.getInt(0);
-		returnData[i][1] = results.getString(1);
-		returnData[i][2] = results.getDouble(2); // TODO may need to
-							 // increase col index
-							 // by one if the join
-							 // puts both cols in
-							 // resultSet.
+		returnData[i][0] = results.getInt(1);
+		returnData[i][1] = results.getString(2);
+		returnData[i][2] = results.getDouble(3);
 		i++;
 	    }
 	}

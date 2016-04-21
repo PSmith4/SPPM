@@ -11,25 +11,27 @@ public class DatabaseTests
     @Test
     public void testGetPOSInterfaceData()
     {
-	try
-	{
-	    DataBaseAccess dba = DataBaseAccess.getInstance();
-
-	    Object[][] returnData = { { 1, "Test Prod 1", 2.0, 10.0 }, { 2, "Test Prod 2", 2.0, 5.0 } };
-	    Assert.assertArrayEquals(returnData, DataBaseAccess.getPOSInterfaceData());
-	}
-	catch(SQLException e)
-	{
-	    e.printStackTrace();
-	    fail("something went wrong");
-	}
+	Object[][] returnData = { { 1, "Test Prod 1", 2.0, 10.0 }, { 2, "Test Prod 2", 2.0, 5.0 } };
+	Assert.assertArrayEquals(returnData, DataBaseAccess.getPOSInterfaceData());
 
     }
 
     @Test
     public void testMakeSale()
     {
-	fail("Not yet implemented");
+	try
+	{
+	    DataBaseAccess dba = DataBaseAccess.getInstance();
+
+	    Object[][] sendData = { { 1, "Test Prod 1", 2.0, 10.0 }, { 2, "Test Prod 2", 2.0, 5.0 } };
+	    dba.makeSale(sendData);
+
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("something went wrong");
+	}
     }
 
     @Test
