@@ -328,8 +328,8 @@ public class DataBaseAccess
 
 	    for(int i = 0; i < data.length; i++)
 	    {
-		updateInventory.setString(1, (String) data[i][0]);
-		updateInventory.setInt(2, (int) data[i][1]);
+		updateInventory.setInt(1, (Integer) data[i][0]);
+		updateInventory.setInt(2, (Integer) data[i][1]);
 		updateInventory.executeUpdate();
 
 		conn.commit();

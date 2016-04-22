@@ -27,6 +27,13 @@ import passtask.db.DataBaseAccess;
 public class newItem extends JPanel
 {
 
+    public void update()
+    {
+        CatalougeTable=new JTable(new DefaultTableModel(DataBaseAccess.getItemCatalogue(),
+		new String[]
+	{ "ID", "Name", "Price","Description" }));
+    }
+    
     private JTable CatalougeTable = new JTable(new DefaultTableModel(DataBaseAccess.getItemCatalogue(),
 		new String[]
 	{ "ID", "Name", "Price","Description" }));

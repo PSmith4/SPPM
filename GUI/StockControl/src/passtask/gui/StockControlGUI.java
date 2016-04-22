@@ -51,16 +51,9 @@ public class StockControlGUI
     public static void update() throws SQLException
     {
         System.out.println("Rebooting GUI");
-       sales = new StorePanel();
-       incomingStock= new newStock();
-       additem= new newItem();
-       reporter= new ReportRequestGUI();
-       tabbedPane.removeAll();
-       tabbedPane.add("Sale", sales);
-       tabbedPane.add("Stock delivery", incomingStock);
-       tabbedPane.add("Add item", additem);
-       tabbedPane.add("Get Report", reporter);
- 
+       sales.update();
+       additem.update();
+       incomingStock.update();
     }
     
 }

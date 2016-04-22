@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -138,7 +139,8 @@ public class StorePanel extends JPanel
 
 		    }
 		});
-                update();
+                catTableModel.fireTableDataChanged();
+	saleTableModel.fireTableDataChanged();
 		
 
 		return remove;
@@ -239,67 +241,7 @@ public class StorePanel extends JPanel
     {
 
 	setSize(836, 546);
-
-	Object[][] tempCatContent = DataBaseAccess.getShipmentUpdate();
-
-	for(int i = 0; i < tempCatContent.length; i++)
-	{
-	    int buttoncount;
-	    if((Integer) tempCatContent[i][2] > 0)
-	    {
-		CatContent.add(new Object[4]);
-		buttoncount = CatContent.size() - 1;
-		CatContent.get(buttoncount)[0] = tempCatContent[i][0];
-		CatContent.get(buttoncount)[1] = tempCatContent[i][1];
-		CatContent.get(buttoncount)[2] = tempCatContent[i][2];
-
-		JButton addButton = new JButton("Add");
-		CatContent.get(buttoncount)[3] = addButton;
-
-		addButton.addActionListener(new ActionListener()
-		{
-		    private Object[] newSaleItem;
-
-		    public void actionPerformed(ActionEvent arg0)
-		    {
-			System.out.println("add " + newSaleItem[1] + " to sale");
-			Boolean found = false;
-			int loopcount = 0;
-			for(Object[] Oldsaleitem : SalesContent)
-			{
-			    if(!found && (Integer) Oldsaleitem[0] == (Integer) newSaleItem[0])
-			    {
-				Oldsaleitem[2] = (Integer) Oldsaleitem[2] + 1;
-				SalesContent.set(loopcount, Oldsaleitem);
-				found = true;
-				break;
-			    }
-			    loopcount++;
-			}
-			if(!found)
-			{
-			    Object[] temp = { newSaleItem[0], newSaleItem[1], new Integer(1) };
-			    SalesContent.add(temp);
-			}
-
-			newSaleItem[2] = (Integer) newSaleItem[2] - 1;
-			if((Integer) newSaleItem[2] > 0)
-			    CatContent.set(CatContent.indexOf(newSaleItem), newSaleItem);
-
-			saleTableModel.fireTableDataChanged();
-			catTableModel.fireTableDataChanged();
-
-		    }
-
-		    private ActionListener init(Object var[])
-		    {
-			newSaleItem = var;
-			return this;
-		    }
-		}.init(CatContent.get(buttoncount)));
-	    }
-
-	}
+        fetchTable();
 
 	JTable CatalougeTable = new JTable(catTableModel); // "Add to Sale"
 	CatalougeTable.setDefaultRenderer(JButton.class, new TabbleButtonRenderer("+"));
@@ -346,7 +288,9 @@ public class StorePanel extends JPanel
 		    loopcount++;
 		}
                 SalesContent.clear();
-update();
+                
+              
+                
 		for(Object[] catitem : CatContent)
 		{
 		    for(int i = 0; i < output.length; i++)
@@ -357,9 +301,15 @@ update();
 			}
 		    }
 
-		}
+		}  
+               
 
-		DataBaseAccess.makeSale(output);
+		DataBaseAccess.makeSale(output); 
+                try {
+                            StockControlGUI.update();
+                        } catch (SQLException ex) {
+
+                        }
 	    }
 	});
 
@@ -404,7 +354,74 @@ update();
    
     public void update()
     {
+        fetchTable();
         catTableModel.fireTableDataChanged();
-	saleTableModel.fireTableDataChanged();}
+	saleTableModel.fireTableDataChanged();
+    }
     
+
+
+    private void fetchTable()
+    {
+    Object[][] tempCatContent = DataBaseAccess.getShipmentUpdate();
+CatContent.clear();
+            for(int i = 0; i < tempCatContent.length; i++)
+            {
+                int buttoncount;
+                if((Integer) tempCatContent[i][2] > 0)
+                {
+                    CatContent.add(new Object[4]);
+                    buttoncount = CatContent.size() - 1;
+                    CatContent.get(buttoncount)[0] = tempCatContent[i][0];
+                    CatContent.get(buttoncount)[1] = tempCatContent[i][1];
+                    CatContent.get(buttoncount)[2] = tempCatContent[i][2];
+
+                    JButton addButton = new JButton("Add");
+                    CatContent.get(buttoncount)[3] = addButton;
+
+                    addButton.addActionListener(new ActionListener()
+                    {
+                        private Object[] newSaleItem;
+
+                        public void actionPerformed(ActionEvent arg0)
+                        {
+                            System.out.println("add " + newSaleItem[1] + " to sale");
+                            Boolean found = false;
+                            int loopcount = 0;
+                            for(Object[] Oldsaleitem : SalesContent)
+                            {
+                                if(!found && (Integer) Oldsaleitem[0] == (Integer) newSaleItem[0])
+                                {
+                                    Oldsaleitem[2] = (Integer) Oldsaleitem[2] + 1;
+                                    SalesContent.set(loopcount, Oldsaleitem);
+                                    found = true;
+                                    break;
+                                }
+                                loopcount++;
+                            }
+                            if(!found)
+                            {
+                                Object[] temp = { newSaleItem[0], newSaleItem[1], new Integer(1) };
+                                SalesContent.add(temp);
+                            }
+
+                            newSaleItem[2] = (Integer) newSaleItem[2] - 1;
+                            if((Integer) newSaleItem[2] > 0)
+                                CatContent.set(CatContent.indexOf(newSaleItem), newSaleItem);
+
+                            saleTableModel.fireTableDataChanged();
+                            catTableModel.fireTableDataChanged();
+
+                        }
+
+                        private ActionListener init(Object var[])
+                        {
+                            newSaleItem = var;
+                            return this;
+                        }
+                    }.init(CatContent.get(buttoncount)));
+                }
+
+            }
+    }
 }
