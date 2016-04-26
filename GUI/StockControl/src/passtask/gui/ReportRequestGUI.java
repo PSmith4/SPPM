@@ -83,6 +83,7 @@ public class ReportRequestGUI extends JPanel
 		    }
 
 		}
+                 
 	    }
 	});
 

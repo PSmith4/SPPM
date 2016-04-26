@@ -13,6 +13,7 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{color}
 \usepackage{listings}
 \lstset{
 	basicstyle=\footnotesize,
@@ -34,7 +35,7 @@
 		\hline  Click "Add to Sale" button& Stock reduce by 1, Stock in sale increase by one\\
 		\hline Click Remove button (with 1)& Item removed from sale\\
 		\hline  Click remove button (with >1) & Item reduce in count\\
-		\hline Click Finish with sale& Crash \\
+		\hline Click Finish with sale& \color{red}Crash \\
 			\hline 
 		\end{tabular}
 		\begin{lstlisting}
@@ -97,6 +98,8 @@
 	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)\\
 	\end{lstlisting}
 	\newpage
+	Fixed extractor code\\
+	\hspace*{-0.1cm}
 \begin{tabular}{|m{7cm}|m{7cm}|}
 		\hline Round 2\\
 		\hline \textbf{Action} & \textbf{Result}\\
@@ -111,47 +114,58 @@
 	
 	\subsection{Stock Delivery}
 	\begin{tabular}{|m{7cm}|m{7cm}|}
+		\hline Round 1\\
 		\hline \textbf{Action} & \textbf{Result}\\
 		\hline Click "Add stock to system" with no change to stock & no effect, as expected\\
 		\hline Increase new stock count & works fine\\
 		\hline Decrease new stock count & works fine\\
-		\hline Click "Add stock to system" with new to add & new stock count sent to database\\
-		\hline & \\
-	\end{tabular}
-	\subsection{Add item}
+		\hline Click "Add stock to system" with new to add &\color{blue} new stock count sent to database, but no change in GUI\\
+		\hline
+	\end{tabular}\\ \ \\
+		Added update system for refreshing GUI\\ \ \\
+		\begin{tabular}{|m{7cm}|m{7cm}|}
+			\hline Round 2\\
+			\hline \textbf{Action} & \textbf{Result}\\
+			\hline Click "Add stock to system" with no change to stock & no effect, as expected\\
+			\hline Increase new stock count & works fine\\
+			\hline Decrease new stock count & works fine\\
+			\hline Click "Add stock to system" with new to add & new stock count sent to database, all GUI panels update\\
+			\hline 
+		\end{tabular}
+	\subsection{New item}
 	\begin{tabular}{|m{7cm}|m{7cm}|}
 		\hline Round 1&\\
 		\hline \textbf{Action} & \textbf{Result}\\
-		\hline click "Add item" with nothing typed & adds blank item \\
+		\hline click "Add item" with nothing typed & \color{red}adds blank item \\
+		\hline add content to fields and add & works fine\\
+		\hline Scroll through current catalogue & all content counted for\\
+		\hline 
+	\end{tabular}\\ \ \\
+	Add blank column check\\ \ \\
+	\hspace*{-0.1cm}
+	\begin{tabular}{|m{7cm}|m{7cm}|}
+		\hline Round 2&\\
+		\hline \textbf{Action} & \textbf{Result}\\
+		\hline click "Add item" with nothing typed &\color{red} System does nothing, as expected. But also has no warning \\
+		\hline add content to fields and add & works fine\\
+		\hline Scroll through current catalogue&all content counted for\\
 		\hline 
 	\end{tabular}
-	
-		\begin{tabular}{|m{7cm}|m{7cm}|}
-			\hline Round 2&\\
-			\hline \textbf{Action} & \textbf{Result}\\
-			\hline click "Add item" with nothing typed & adds blank item \\
-			\hline 
-		\end{tabular}
-	
-	\section{Stock control Round 2}
-	\subsection{Sales page}
-\begin{tabular}{|m{7cm}|m{7cm}|}
-		\hline \textbf{Action} & \textbf{Result}\\
-		\hline & \\
-	\end{tabular}
-	\subsection{Stock Delivery}
-\begin{tabular}{|m{7cm}|m{7cm}|}
-		\hline \textbf{Action} & \textbf{Result}\\
-		\hline & \\
-	\end{tabular}
-	\subsection{Add item}
-\begin{tabular}{|m{7cm}|m{7cm}|}
-		\hline \textbf{Action} & \textbf{Result}\\
-		\hline & \\
-	\end{tabular}
-	
-	
-	\section{Report request Round 1}
+
 
 	
+	\section{Report request}
+\begin{tabular}{|m{7cm}|m{7cm}|}
+	\hline Round 1&\\
+	\hline \textbf{Action} & \textbf{Result}\\
+	\hline Current stock, Display Report & list displays on screen as desired\\
+	\hline Current stock, Generate in CSV, no folder & \color{red}sends command with folder location null, needs error message\\
+	\hline Try to select a folder& works fine\\
+	\hline Current stock, Generate in CSV, folder selected& sends command. \color{red}But no generator has been made \\
+	\hline Sales History set& History period and History step become usable. \color{brown}Only last day and hour, as expected for this stage of development\\
+	\hline Display report, with sale history & Graph displays correctly\\
+	\hline Sales History, Generate in CSV, no folder & \color{red}sends command with folder location null, needs error message\\
+	\hline Sales History, Generate in CSV, folder selected& sends command. \color{red}But no generator has been made \\
+	\hline 
+\end{tabular}
 \end{document}
