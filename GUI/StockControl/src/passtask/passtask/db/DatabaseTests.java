@@ -7,6 +7,20 @@ import org.junit.Test;
 
 public class DatabaseTests
 {
+    @Test
+    public void testConnection()
+    {
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    DataBaseAccess dba = DataBaseAccess.getInstance();
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("Connection Failed");
+	}
+    }
 
     @Test
     public void testGetPOSInterfaceData()
@@ -21,6 +35,7 @@ public class DatabaseTests
     {
 	try
 	{
+	    DataBaseAccess.setTestConnection(true);
 	    DataBaseAccess dba = DataBaseAccess.getInstance();
 
 	    Object[][] sendData = { { 1, 11.0 }, { 2, 6.0 } };
@@ -32,26 +47,9 @@ public class DatabaseTests
 	    e.printStackTrace();
 	    fail("something went wrong");
 	}
-    }
 
-    @Test
-    public void testGetItemCatalogue()
-    {
-	fail("Not yet implemented");
-    }
-
-    @Test
-    public void testConnection()
-    {
-	try
-	{
-	    DataBaseAccess dba = DataBaseAccess.getInstance();
-	}
-	catch(SQLException e)
-	{
-	    e.printStackTrace();
-	    fail("Connection Failed");
-	}
+	Object[][] returnData = { { 1, "Test Prod 1", 2.0, 11.0 }, { 2, "Test Prod 2", 2.0, 6.0 } };
+	Assert.assertArrayEquals(returnData, DataBaseAccess.getPOSInterfaceData());
     }
 
     @Test
@@ -72,4 +70,15 @@ public class DatabaseTests
 	fail("Not yet implemented");
     }
 
+    @Test
+    public void testGetItemCatalogue()
+    {
+	fail("Not done");
+    }
+
+    @Test
+    public void testGetSaleHistory()
+    {
+	fail("ouch");
+    }
 }

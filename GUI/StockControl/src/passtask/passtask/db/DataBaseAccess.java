@@ -10,13 +10,15 @@ import java.util.Properties;
 
 public class DataBaseAccess
 {
-    private Connection dbConn = null;
+    private static Connection dbConn = null;
     private static DataBaseAccess instance = null;
     private static String userName = "sppm_1";
     private static String password = "sppm1234";
     private static String serverName = "101.188.15.208";
     private static String portNumber = "3306";
     private static String databaseName = "sppm_phpsrs";
+    private static String testDatabaseName = "sppm_test";
+    private static boolean testEnv = false;
 
     /**
      * Empty constructor for singleton.
@@ -26,7 +28,14 @@ public class DataBaseAccess
      */
     private DataBaseAccess() throws SQLException
     {
-	dbConn = getConnection();
+	if(testEnv)
+	{
+	    getTestConnection();
+	}
+	else
+	{
+	    getConnection();
+	}
     };
 
     /**
@@ -49,11 +58,10 @@ public class DataBaseAccess
     /**
      * Gets a copy of the connection to the database.
      * 
-     * @return a connection to the database.
      * @throws SQLException
      *             if there is a problem connecting to the database.
      */
-    private static Connection getConnection() throws SQLException
+    private static void getConnection() throws SQLException
     {
 	Connection conn = null;
 	Properties connectionProps = new Properties();
@@ -64,7 +72,27 @@ public class DataBaseAccess
 	conn = DriverManager.getConnection("jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName,
 		connectionProps);
 
-	return conn;
+	dbConn = conn;
+    }
+
+    /**
+     * Gets a copy of the connection to the test database.
+     * 
+     * @throws SQLException
+     *             if there is a problem connecting to the database.
+     */
+    private static void getTestConnection() throws SQLException
+    {
+	Connection conn = null;
+	Properties connectionProps = new Properties();
+	connectionProps.put("user", userName);
+	connectionProps.put("password", password);
+	connectionProps.put("useSSL", "false");
+
+	conn = DriverManager.getConnection("jdbc:mysql://" + serverName + ":" + portNumber + "/" + testDatabaseName,
+		connectionProps);
+
+	dbConn = conn;
     }
 
     /**
@@ -75,14 +103,26 @@ public class DataBaseAccess
      */
     public static Object[][] getPOSInterfaceData()
     {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		DataBaseAccess.getInstance();
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	Statement getData = null;
 	Object[][] returnData = null;
 
 	String selectData = "SELECT product.barcode, product.prod_name, product.price, inventory.stock FROM PRODUCT INNER JOIN INVENTORY on product.barcode = inventory.barcode";
 
-	try(Connection conn = getConnection())
+	try
 	{
-	    getData = conn.createStatement();
+	    getData = dbConn.createStatement();
 	    ResultSet results = getData.executeQuery(selectData);
 	    int rowCount = 0, i = 0;
 
@@ -121,17 +161,29 @@ public class DataBaseAccess
      */
     public static void makeSale(Object[][] data)
     {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		DataBaseAccess.getInstance();
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	PreparedStatement updateInventory = null;
 	PreparedStatement updateSaleHistory = null;
 
 	String updateInventoryString = "UPDATE " + databaseName + ".inventory SET stock = ? WHERE barcode = ?";
 	String updateHistoryString = "INSERT INTO SALE_HISTORY (barcode, updated_stock) VALUES (?, ?)";
 
-	try(Connection conn = getConnection())
+	try
 	{
-	    conn.setAutoCommit(false);
-	    updateInventory = conn.prepareStatement(updateInventoryString);
-	    updateSaleHistory = conn.prepareStatement(updateHistoryString);
+	    dbConn.setAutoCommit(false);
+	    updateInventory = dbConn.prepareStatement(updateInventoryString);
+	    updateSaleHistory = dbConn.prepareStatement(updateHistoryString);
 
 	    for(int i = 0; i < data.length; i++)
 	    {
@@ -142,7 +194,7 @@ public class DataBaseAccess
 		updateSaleHistory.setInt(2, (int) data[i][1]);
 		updateSaleHistory.executeUpdate();
 
-		conn.commit();
+		dbConn.commit();
 	    }
 	}
 	catch(SQLException e)
@@ -160,14 +212,26 @@ public class DataBaseAccess
      */
     public static Object[][] getItemCatalogue()
     {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		DataBaseAccess.getInstance();
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	Statement getData = null;
 	Object[][] returnData = null;
 
 	String selectData = "SELECT barcode, prod_name, price, description FROM product";
 
-	try(Connection conn = getConnection())
+	try
 	{
-	    getData = conn.createStatement();
+	    getData = dbConn.createStatement();
 	    ResultSet results = getData.executeQuery(selectData);
 	    int rowCount = 0, i = 0;
 
@@ -197,40 +261,6 @@ public class DataBaseAccess
     }
 
     /**
-     * Add A new itemS to the product catalog.
-     * 
-     * @param data
-     *            a two dimensional array containing the new product name, the
-     *            description and the price.
-     */
-    public void addItem(Object[][] data)
-    {
-	PreparedStatement updateProduct = null;
-
-	String updateProductString = "INSERT INTO PRODUCT (prod_name, description, price) VALUES (?, ?, ?)";
-
-	try(Connection conn = getConnection())
-	{
-	    conn.setAutoCommit(false);
-	    updateProduct = conn.prepareStatement(updateProductString);
-
-	    for(int i = 0; i < data.length; i++)
-	    {
-		updateProduct.setString(1, (String) data[i][0]);
-		updateProduct.setString(2, (String) data[i][1]);
-		updateProduct.setDouble(3, (double) data[i][2]);
-		updateProduct.executeUpdate();
-
-		conn.commit();
-	    }
-	}
-	catch(SQLException e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    /**
      * Add A new item to the product catalog.
      * 
      * @param data
@@ -239,21 +269,33 @@ public class DataBaseAccess
      */
     public static void addItem(Object[] data)
     {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		DataBaseAccess.getInstance();
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	PreparedStatement updateProduct = null;
 
 	String updateProductString = "INSERT INTO PRODUCT (prod_name, description, price) VALUES (?, ?, ?)";
 
-	try(Connection conn = getConnection())
+	try
 	{
-	    conn.setAutoCommit(false);
-	    updateProduct = conn.prepareStatement(updateProductString);
+	    dbConn.setAutoCommit(false);
+	    updateProduct = dbConn.prepareStatement(updateProductString);
 
 	    updateProduct.setString(1, (String) data[0]);
 	    updateProduct.setString(2, (String) data[1]);
 	    updateProduct.setDouble(3, (double) data[2]);
 	    updateProduct.executeUpdate();
 
-	    conn.commit();
+	    dbConn.commit();
 
 	}
 	catch(SQLException e)
@@ -270,14 +312,26 @@ public class DataBaseAccess
      */
     public static Object[][] getShipmentUpdate()
     {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		DataBaseAccess.getInstance();
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	Statement getData = null;
 	Object[][] returnData = null;
 
 	String selectData = "SELECT product.barcode, product.prod_name, inventory.stock FROM PRODUCT LEFT JOIN INVENTORY on product.barcode = inventory.barcode ";
 
-	try(Connection conn = getConnection())
+	try
 	{
-	    getData = conn.createStatement();
+	    getData = dbConn.createStatement();
 	    ResultSet results = getData.executeQuery(selectData);
 	    int rowCount = 0, i = 0;
 
@@ -314,14 +368,26 @@ public class DataBaseAccess
      */
     public static void addShipment(Object[][] data)
     {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		DataBaseAccess.getInstance();
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	PreparedStatement updateInventory = null;
 
 	String updateInventoryString = "INSERT INTO INVENTORY (barcode, stock) VALUES (?, ?)";
 
-	try(Connection conn = getConnection())
+	try
 	{
-	    conn.setAutoCommit(false);
-	    updateInventory = conn.prepareStatement(updateInventoryString);
+	    dbConn.setAutoCommit(false);
+	    updateInventory = dbConn.prepareStatement(updateInventoryString);
 
 	    for(int i = 0; i < data.length; i++)
 	    {
@@ -329,7 +395,7 @@ public class DataBaseAccess
 		updateInventory.setInt(2, (Integer) data[i][1]);
 		updateInventory.executeUpdate();
 
-		conn.commit();
+		dbConn.commit();
 	    }
 	}
 	catch(SQLException e)
@@ -345,14 +411,26 @@ public class DataBaseAccess
      */
     public static Object[][] getSaleHistory()
     {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		DataBaseAccess.getInstance();
+	    }
+	    catch(SQLException e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+
 	Statement getData = null;
 	Object[][] returnData = null;
 
 	String selectData = "SELECT sale_history.barcode, product.prod_name, sale_history.updated_stock, sale_history.sale_time FROM PRODUCT LEFT JOIN SALE_HISTORY on product.barcode = sale_history.barcode ";
 
-	try(Connection conn = getConnection())
+	try
 	{
-	    getData = conn.createStatement();
+	    getData = dbConn.createStatement();
 	    ResultSet results = getData.executeQuery(selectData);
 	    int rowCount = 0, i = 0;
 
@@ -379,5 +457,17 @@ public class DataBaseAccess
 	}
 
 	return returnData;
+    }
+
+    /**
+     * Sets whether to connect to the test database or the real database.
+     * 
+     * @param b
+     *            the boolean determining whether to connect to the test
+     *            database (true) or not (false).
+     */
+    public static void setTestConnection(boolean b)
+    {
+	testEnv = b;
     }
 }
