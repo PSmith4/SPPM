@@ -1,4 +1,4 @@
-package db;
+package passtask.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -119,7 +119,7 @@ public class DataBaseAccess
      *            (barcode) and updated stock amount (old current - amount
      *            sold).
      */
-    public void makeSale(Object[][] data)
+    public static void makeSale(Object[][] data)
     {
 	PreparedStatement updateInventory = null;
 	PreparedStatement updateSaleHistory = null;
@@ -163,7 +163,7 @@ public class DataBaseAccess
 	Statement getData = null;
 	Object[][] returnData = null;
 
-	String selectData = "SELECT barcode, prod_name, description FROM product";
+	String selectData = "SELECT barcode, prod_name, price, description FROM product";
 
 	try(Connection conn = getConnection())
 	{
@@ -177,13 +177,14 @@ public class DataBaseAccess
 		results.beforeFirst();
 	    }
 
-	    returnData = new Object[rowCount][3];
+	    returnData = new Object[rowCount][4];
 
 	    while(results.next())
 	    {
 		returnData[i][0] = results.getInt(1);
 		returnData[i][1] = results.getString(2);
-		returnData[i][2] = results.getString(3);
+                returnData[i][2] = results.getInt(3);
+		returnData[i][3] = results.getString(4);
 		i++;
 	    }
 	}
@@ -196,7 +197,7 @@ public class DataBaseAccess
     }
 
     /**
-     * Add a new item to the product catalog.
+     * Add A new itemS to the product catalog.
      * 
      * @param data
      *            a two dimensional array containing the new product name, the
@@ -228,6 +229,41 @@ public class DataBaseAccess
 	    e.printStackTrace();
 	}
     }
+    
+     /**
+     * Add A new item to the product catalog.
+     * 
+     * @param data
+     *            a one dimensional array containing the new product name, the
+     *            description and the price.
+     */
+    public static void addItem(Object[] data)
+    {
+	PreparedStatement updateProduct = null;
+
+	String updateProductString = "INSERT INTO PRODUCT (prod_name, description, price) VALUES (?, ?, ?)";
+
+	try(Connection conn = getConnection())
+	{
+	    conn.setAutoCommit(false);
+	    updateProduct = conn.prepareStatement(updateProductString);
+
+	    
+		updateProduct.setString(1, (String) data[0]);
+		updateProduct.setString(2, (String) data[1]);
+		updateProduct.setDouble(3, (double) data[2]);
+		updateProduct.executeUpdate();
+
+		conn.commit();
+	    
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	}
+    }
+    
+    
 
     /**
      * Gets the ID (barcode), name and description of all products.
@@ -240,7 +276,7 @@ public class DataBaseAccess
 	Statement getData = null;
 	Object[][] returnData = null;
 
-	String selectData = "SELECT product.barcode, product.prod_name, inventory.stock FROM PRODUCT INNER JOIN INVENTORY on product.barcode = inventory.barcode";
+	String selectData = "SELECT product.barcode, product.prod_name, inventory.stock FROM PRODUCT LEFT JOIN INVENTORY on product.barcode = inventory.barcode ";
 
 	try(Connection conn = getConnection())
 	{
@@ -260,7 +296,7 @@ public class DataBaseAccess
 	    {
 		returnData[i][0] = results.getInt(1);
 		returnData[i][1] = results.getString(2);
-		returnData[i][2] = results.getDouble(3);
+		returnData[i][2] = results.getInt(3); //lets make this an int, as 1.5 items is hard come by
 		i++;
 	    }
 	}
@@ -292,8 +328,8 @@ public class DataBaseAccess
 
 	    for(int i = 0; i < data.length; i++)
 	    {
-		updateInventory.setString(1, (String) data[i][0]);
-		updateInventory.setInt(2, (int) data[i][1]);
+		updateInventory.setInt(1, (Integer) data[i][0]);
+		updateInventory.setInt(2, (Integer) data[i][1]);
 		updateInventory.executeUpdate();
 
 		conn.commit();
@@ -307,7 +343,7 @@ public class DataBaseAccess
 
     /*
      * Output, 2d array of stock in system, with ID number, Name and Stock
-     */
+    
 
     public static Object[][] getFullCataloge()
     {
@@ -372,8 +408,8 @@ public class DataBaseAccess
 		{ new Integer(186166), "Other thing5", "words go here", new Integer(1) },
 		{ new Integer(375734), "Third thing6", "words go here", new Integer(1) } });
     }
-
-    public static Object[][] getSaleHistory()
+*/
+    public static Object[][] getSaleHistoryTester()
     {
 	try
 	{
@@ -410,7 +446,7 @@ public class DataBaseAccess
 		{ new Integer(186179), "Other thing10", new Integer(9) },
 		{ new Integer(186186), "Other thing11", new Integer(10) } });
     }
-
+/*
     public static void NewITem(Object[] newItem)
     {
 	System.out.println(newItem[0] + " " + newItem[1] + " " + newItem[2]);
@@ -422,5 +458,5 @@ public class DataBaseAccess
 	for(int i = 0; i < changelist.length; i++)
 	    System.out.println(changelist[i][0] + " " + changelist[i][1]);
     }
-
+ */
 }

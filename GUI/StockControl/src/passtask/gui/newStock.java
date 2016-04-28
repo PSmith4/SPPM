@@ -1,4 +1,4 @@
-package gui;
+package passtask.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,11 +22,11 @@ import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import db.DataBaseAccess;
+import passtask.db.DataBaseAccess;
 
 public class newStock extends JPanel
 {
-    private DataBaseAccess dba = DataBaseAccess.getInstance();
+    private DataBaseAccess dba;
 
     /**
      * 
@@ -34,11 +35,11 @@ public class newStock extends JPanel
     final ArrayList<Object[]> CatContent = new ArrayList<Object[]>();
     final CatTableModel catTableModel = new CatTableModel(CatContent);
 
-    public newStock()
-    {
-	setSize(836, 546);
-	Object[][] tempCatContent = DataBaseAccess.getFullCataloge();
 
+    private void fetchTable()
+    {
+        Object[][] tempCatContent = DataBaseAccess.getShipmentUpdate();
+CatContent.clear();
 	for(int i = 0; i < tempCatContent.length; i++)
 	{
 	    int buttoncount;
@@ -52,7 +53,21 @@ public class newStock extends JPanel
 	    CatContent.get(buttoncount)[3] = newstockSpin;
 
 	}
-
+        
+    }
+    
+    public void update()
+    {
+        fetchTable();
+        catTableModel.fireTableDataChanged();
+    }
+    
+    public newStock() throws SQLException
+    {
+        this.dba = DataBaseAccess.getInstance();
+	setSize(836, 546);
+	
+        fetchTable();
 	JTable CatalougeTable = new JTable(catTableModel);
 
 	CatalougeTable.setDefaultRenderer(JSpinner.class, new TabbleSpinnerRenderer());
@@ -94,8 +109,12 @@ public class newStock extends JPanel
 		    outputArray[loopcount] = item;
 		    loopcount++;
 		}
-		DataBaseAccess.StockChange(outputArray);
-		catTableModel.fireTableDataChanged();
+		DataBaseAccess.addShipment(outputArray);
+		  try {
+                            StockControlGUI.update();
+                        } catch (SQLException ex) {
+
+                        }
 	    }
 	});
 

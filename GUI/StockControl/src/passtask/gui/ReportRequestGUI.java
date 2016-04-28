@@ -1,4 +1,4 @@
-package gui;
+package passtask.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import db.DataBaseAccess;
+import passtask.db.DataBaseAccess;
 
 public class ReportRequestGUI extends JPanel
 {
@@ -83,6 +83,7 @@ public class ReportRequestGUI extends JPanel
 		    }
 
 		}
+                 
 	    }
 	});
 
@@ -332,7 +333,7 @@ public class ReportRequestGUI extends JPanel
 	{
 	    JTable StockList;
 
-	    DefaultTableModel model = new DefaultTableModel(DataBaseAccess.getFullCataloge(),
+	    DefaultTableModel model = new DefaultTableModel(DataBaseAccess.getShipmentUpdate(),
 		    new String[]
 	    { "ID", "Name", "Stock" });
 	    StockList = new JTable(model);
