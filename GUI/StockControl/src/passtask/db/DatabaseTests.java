@@ -23,7 +23,7 @@ public class DatabaseTests
 	{
 	    DataBaseAccess dba = DataBaseAccess.getInstance();
 
-	    Object[][] sendData = { { 1, "Test Prod 1", 2.0, 10.0 }, { 2, "Test Prod 2", 2.0, 5.0 } };
+	    Object[][] sendData = { { 1, 11.0 }, { 2, 6.0 } };
 	    dba.makeSale(sendData);
 
 	}
