@@ -1,4 +1,4 @@
-package report;
+package passtask.report;
 
 public enum ReportTypes
 {
