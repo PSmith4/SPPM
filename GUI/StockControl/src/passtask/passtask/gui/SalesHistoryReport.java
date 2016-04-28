@@ -24,7 +24,7 @@ public class SalesHistoryReport extends JPanel
     public SalesHistoryReport()
     {
 
-	Object[][] saleshistory = DataBaseAccess.getSaleHistoryTester();
+	Object[][] saleshistory = DataBaseAccess.getSaleHistory();
 
 	// create a dataset...
 
