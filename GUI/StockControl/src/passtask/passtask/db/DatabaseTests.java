@@ -13,7 +13,7 @@ public class DatabaseTests
 	try
 	{
 	    DataBaseAccess.setTestConnection(true);
-	    DataBaseAccess dba = DataBaseAccess.getInstance();
+	    DataBaseAccess.getInstance();
 	}
 	catch(SQLException e)
 	{
@@ -25,21 +25,30 @@ public class DatabaseTests
     @Test
     public void testGetPOSInterfaceData()
     {
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    DataBaseAccess.getInstance();
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("Connection Failed");
+	}
+
+	// barcode, name, price, stock
 	Object[][] returnData = { { 1, "Test Prod 1", 2.0, 10.0 }, { 2, "Test Prod 2", 2.0, 5.0 } };
 	Assert.assertArrayEquals(returnData, DataBaseAccess.getPOSInterfaceData());
 
     }
 
     @Test
-    public void testMakeSale()
+    public void testGetShipmentUpdate()
     {
 	try
 	{
 	    DataBaseAccess.setTestConnection(true);
-	    DataBaseAccess dba = DataBaseAccess.getInstance();
-
-	    Object[][] sendData = { { 1, 11.0 }, { 2, 6.0 } };
-	    dba.makeSale(sendData);
+	    DataBaseAccess.getInstance();
 
 	}
 	catch(SQLException e)
@@ -48,37 +57,115 @@ public class DatabaseTests
 	    fail("something went wrong");
 	}
 
-	Object[][] returnData = { { 1, "Test Prod 1", 2.0, 11.0 }, { 2, "Test Prod 2", 2.0, 6.0 } };
-	Assert.assertArrayEquals(returnData, DataBaseAccess.getPOSInterfaceData());
+	// barcode, name, stock
+	Object[][] returnData = { { 1, "Test Prod 1", 10.0 }, { 2, "Test Prod 2", 5.0 } };
+	Assert.assertArrayEquals(returnData, DataBaseAccess.getShipmentUpdate());
     }
 
     @Test
-    public void testAddItem()
+    public void testMakeSale()
     {
-	fail("Not yet implemented");
-    }
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    DataBaseAccess.getInstance();
 
-    @Test
-    public void testGetShipmentUpdate()
-    {
-	fail("Not yet implemented");
-    }
+	    Object[][] sendData = { { 1, 11.0 }, { 2, 6.0 } };
+	    DataBaseAccess.makeSale(sendData);
 
-    @Test
-    public void testAddShipment()
-    {
-	fail("Not yet implemented");
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("something went wrong");
+	}
+
+	// barcode, name, price, stock
+	Object[][] returnData = { { 1, "Test Prod 1", 11.0 }, { 2, "Test Prod 2", 6.0 } };
+	Assert.assertArrayEquals(returnData, DataBaseAccess.getShipmentUpdate());
     }
 
     @Test
     public void testGetItemCatalogue()
     {
-	fail("Not done");
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    DataBaseAccess.getInstance();
+
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("something went wrong");
+	}
+
+	// barcode, name, description
+	Object[][] returnData = { { 1, "Test Prod 1", "" }, { 2, "Test Prod 2", "" } };
+	Assert.assertArrayEquals(returnData, DataBaseAccess.getItemCatalogue());
     }
 
     @Test
     public void testGetSaleHistory()
     {
-	fail("ouch");
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    DataBaseAccess.getInstance();
+
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("something went wrong");
+	}
+
+	// TODO: Test sale history
+    }
+
+    @Test
+    public void testAddItem()
+    {
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    DataBaseAccess.getInstance();
+
+	    Object[] sendData = { "Test Prod 3", "Description 3", 2.0 };
+	    DataBaseAccess.addItem(sendData);
+
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("something went wrong");
+	}
+
+	// barcode, name, description
+	Object[][] returnData = { { 1, "Test Prod 1", "" }, { 2, "Test Prod 2", "" }, { 3, "Test Prod 3", "" } };
+	Assert.assertArrayEquals(returnData, DataBaseAccess.getItemCatalogue());
+    }
+
+    @Test
+    public void testAddShipment()
+    {
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    DataBaseAccess.getInstance();
+
+	    Object[][] sendData = { { 3, 5.0 } };
+	    DataBaseAccess.addShipment(sendData);
+
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("something went wrong");
+	}
+
+	// barcode, name, stock
+	Object[][] returnData = { { 1, "Test Prod 1", 11.0 }, { 2, "Test Prod 2", 6.0 }, { 3, "Test Prod 3", 5.0 } };
+	Assert.assertArrayEquals(returnData, DataBaseAccess.getShipmentUpdate());
     }
 }

@@ -305,10 +305,10 @@ public class DataBaseAccess
     }
 
     /**
-     * Gets the ID (barcode), name and description of all products.
+     * Gets the ID (barcode), name and stock of all products.
      * 
      * @return a two dimensional array that has the ID (barcode), name and
-     *         description of all products.
+     *         stock of all products.
      */
     public static Object[][] getShipmentUpdate()
     {
