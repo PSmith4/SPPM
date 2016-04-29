@@ -101,7 +101,8 @@ public class DatabaseTests
 	}
 
 	// barcode, name, description
-	Object[][] returnData = { { 1, "Test Prod 1", "" }, { 2, "Test Prod 2", "" } };
+	Object[][] returnData = { { 1, "Test Prod 1", "This is the first test product" },
+		{ 2, "Test Prod 2", "This is the second test product" } };
 	Assert.assertArrayEquals(returnData, DataBaseAccess.getItemCatalogue());
     }
 
@@ -121,6 +122,11 @@ public class DatabaseTests
 	}
 
 	// TODO: Test sale history
+	// barcode, name, updated_stock, saletime (I don't think I'll be able to
+	// test for sale time because it's only included by the DB and therefore
+	// I need to look and read in order to find) I'm also uncertain how to
+	// test for only partial array matching.
+
     }
 
     @Test
@@ -142,7 +148,9 @@ public class DatabaseTests
 	}
 
 	// barcode, name, description
-	Object[][] returnData = { { 1, "Test Prod 1", "" }, { 2, "Test Prod 2", "" }, { 3, "Test Prod 3", "" } };
+	Object[][] returnData = { { 1, "Test Prod 1", "This is the first test product" },
+		{ 2, "Test Prod 2", "This is the second test product" },
+		{ 3, "Test Prod 3", "Description 3" } };
 	Assert.assertArrayEquals(returnData, DataBaseAccess.getItemCatalogue());
     }
 
