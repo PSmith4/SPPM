@@ -3,10 +3,29 @@ package passtask.db;
 import static org.junit.Assert.fail;
 import java.sql.SQLException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class DatabaseTests
 {
+    @Before
+    public void resetTestTable()
+    {
+	String resetQuery = "CALL SPPM_TEST.RESET_SPPM_TEST";
+	java.sql.Statement resetTable = null;
+	try
+	{
+	    DataBaseAccess.setTestConnection(true);
+	    resetTable = DataBaseAccess.getInstance().getConn().createStatement();
+	    resetTable.execute(resetQuery);
+	}
+	catch(SQLException e)
+	{
+	    e.printStackTrace();
+	    fail("Connection Failed");
+	}
+    }
+
     @Test
     public void testConnection()
     {
@@ -148,9 +167,9 @@ public class DatabaseTests
 	}
 
 	// barcode, name, description
-	Object[][] returnData = { { 1, "Test Prod 1", "This is the first test product" },
-		{ 2, "Test Prod 2", "This is the second test product" },
-		{ 3, "Test Prod 3", "Description 3" } };
+	Object[][] returnData = { { 1, "Test Prod 1", 2.0, "This is the first test product" },
+		{ 2, "Test Prod 2", 2.0, "This is the second test product" },
+		{ 3, "Test Prod 3", 2.0, "Description 3" } };
 	Assert.assertArrayEquals(returnData, DataBaseAccess.getItemCatalogue());
     }
 

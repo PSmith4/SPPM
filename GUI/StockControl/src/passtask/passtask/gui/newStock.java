@@ -35,11 +35,10 @@ public class newStock extends JPanel
     final ArrayList<Object[]> CatContent = new ArrayList<Object[]>();
     final CatTableModel catTableModel = new CatTableModel(CatContent);
 
-
     private void fetchTable()
     {
-        Object[][] tempCatContent = DataBaseAccess.getShipmentUpdate();
-CatContent.clear();
+	Object[][] tempCatContent = DataBaseAccess.getShipmentUpdate();
+	CatContent.clear();
 	for(int i = 0; i < tempCatContent.length; i++)
 	{
 	    int buttoncount;
@@ -53,21 +52,21 @@ CatContent.clear();
 	    CatContent.get(buttoncount)[3] = newstockSpin;
 
 	}
-        
+
     }
-    
+
     public void update()
     {
-        fetchTable();
-        catTableModel.fireTableDataChanged();
+	fetchTable();
+	catTableModel.fireTableDataChanged();
     }
-    
+
     public newStock() throws SQLException
     {
-        this.dba = DataBaseAccess.getInstance();
+	this.dba = DataBaseAccess.getInstance();
 	setSize(836, 546);
-	
-        fetchTable();
+
+	fetchTable();
 	JTable CatalougeTable = new JTable(catTableModel);
 
 	CatalougeTable.setDefaultRenderer(JSpinner.class, new TabbleSpinnerRenderer());
@@ -110,11 +109,14 @@ CatContent.clear();
 		    loopcount++;
 		}
 		DataBaseAccess.addShipment(outputArray);
-		  try {
-                            StockControlGUI.update();
-                        } catch (SQLException ex) {
-
-                        }
+		try
+		{
+		    StockControlGUI.update();
+		}
+		catch(SQLException ex)
+		{
+		    ex.printStackTrace();
+		}
 	    }
 	});
 

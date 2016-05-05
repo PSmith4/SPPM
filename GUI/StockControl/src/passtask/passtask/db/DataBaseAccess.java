@@ -14,11 +14,34 @@ public class DataBaseAccess
     private static DataBaseAccess instance = null;
     private static String userName = "sppm_1";
     private static String password = "sppm1234";
-    private static String serverName = "101.188.15.208";
+    // private static String serverName = "101.188.15.208";
+    private static String serverName = "101.181.52.75";
     private static String portNumber = "3306";
     private static String databaseName = "sppm_phpsrs";
     private static String testDatabaseName = "sppm_test";
     private static boolean testEnv = false;
+
+    /**
+     * Gets the current connection.
+     * 
+     * @return the current connection.
+     */
+    public Connection getConn()
+    {
+	if(dbConn == null)
+	{
+	    try
+	    {
+		getConnection();
+	    }
+	    catch(SQLException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+	return DataBaseAccess.dbConn;
+    }
 
     /**
      * Empty constructor for singleton.
@@ -282,8 +305,12 @@ public class DataBaseAccess
 	}
 
 	PreparedStatement updateProduct = null;
+	PreparedStatement getBarcode = null;
+	PreparedStatement updateInventory = null;
 
 	String updateProductString = "INSERT INTO PRODUCT (prod_name, description, price) VALUES (?, ?, ?)";
+	String getBarcodeString = "SELECT barcode FROM PRODUCT WHERE prod_name = ?";
+	String updateInventoryString = "INSERT INTO INVENTORY (barcode, stock) VALUES (?, ?)";
 
 	try
 	{
@@ -293,7 +320,22 @@ public class DataBaseAccess
 	    updateProduct.setString(1, (String) data[0]);
 	    updateProduct.setString(2, (String) data[1]);
 	    updateProduct.setDouble(3, (double) data[2]);
-	    updateProduct.executeUpdate();
+	    System.out.println(updateProduct.executeUpdate());
+
+	    dbConn.commit();
+
+	    getBarcode = dbConn.prepareStatement(getBarcodeString);
+	    getBarcode.setString(1, (String) data[0]);
+
+	    ResultSet results = getBarcode.executeQuery();
+	    results.next();
+	    int barcode = results.getInt(1);
+
+	    updateInventory = dbConn.prepareStatement(updateInventoryString);
+
+	    updateInventory.setInt(1, barcode);
+	    updateInventory.setInt(2, 0);
+	    System.out.println(updateInventory.executeUpdate());
 
 	    dbConn.commit();
 
@@ -382,7 +424,7 @@ public class DataBaseAccess
 
 	PreparedStatement updateInventory = null;
 
-	String updateInventoryString = "INSERT INTO INVENTORY (barcode, stock) VALUES (?, ?)";
+	String updateInventoryString = "UPDATE INVENTORY SET stock = ? WHERE barcode = ?";
 
 	try
 	{
@@ -391,8 +433,8 @@ public class DataBaseAccess
 
 	    for(int i = 0; i < data.length; i++)
 	    {
-		updateInventory.setInt(1, (Integer) data[i][0]);
-		updateInventory.setInt(2, (Integer) data[i][1]);
+		updateInventory.setInt(1, (Integer) data[i][1]);
+		updateInventory.setInt(2, (Integer) data[i][0]);
 		updateInventory.executeUpdate();
 
 		dbConn.commit();
